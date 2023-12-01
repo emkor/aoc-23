@@ -27,8 +27,11 @@ def day_01_pt1_calibration_sum(texts: typing.Iterable[str]) -> int:
 
 def day_01_pt2_parse_valibartion_value(text: str) -> int:
     digit_position_to_val = {p: int(ch) for p, ch in enumerate(text) if ch.isdigit()}
-    word_digit_pos_to_val = {text.find(w): v for w, v in WORD_DIGITS.items() if text.find(w) != -1}
-    merged = collections.OrderedDict(sorted({**digit_position_to_val, **word_digit_pos_to_val}.items()))
+    word_digits_forward = {text.find(w): v for w, v in WORD_DIGITS.items() if text.find(w) != -1}
+    word_digits_reverse = {len(text) - 1 - (text[::-1].find(w[::-1]) + len(w) - 1): v
+                           for w, v in WORD_DIGITS.items() if text.find(w) != -1}
+    merged = collections.OrderedDict(
+        sorted({**digit_position_to_val, **word_digits_forward, **word_digits_reverse}.items()))
     first_digit, last_digit = merged[min(merged.keys())], merged[max(merged.keys())]
     return int(f"{first_digit}{last_digit}")
 
