@@ -6,7 +6,6 @@ from aoc23.day_01_01 import day_01_pt1_parse_calibration_value, day_01_pt1_calib
 
 class TestAocDay01Tests(unittest.TestCase):
 
-
     def test_day_01_pt1_should_get_first_last_digit(self):
         assert day_01_pt1_parse_calibration_value("1abc2") == 12
         assert day_01_pt1_parse_calibration_value("pqr3stu8vwx") == 38
@@ -25,5 +24,18 @@ class TestAocDay01Tests(unittest.TestCase):
         assert day_01_pt2_parse_valibartion_value("zoneight234") == 14
         assert day_01_pt2_parse_valibartion_value("7pqrstsixteen") == 76
 
+    def test_custom_day_01_pt2_should_get_first_last_digit(self):
+        assert day_01_pt2_parse_valibartion_value("ninefivenine") == 99
+        assert day_01_pt2_parse_valibartion_value("rhjfvkznjdvlgv9one8") == 98
+        assert day_01_pt2_parse_valibartion_value("vlfbzpbpseven8tspgqfdzkmfivefourzjzdbxgtvx") == 74
+        assert day_01_pt2_parse_valibartion_value("26four2") == 22
+        assert day_01_pt2_parse_valibartion_value("9two6rxrrxlzc6tmzmxs5lq2") == 92
+        assert day_01_pt2_parse_valibartion_value("138") == 18
+        assert day_01_pt2_parse_valibartion_value("81s") == 81
+        assert day_01_pt2_parse_valibartion_value("kkqpcmvjnine18") == 98
+        assert day_01_pt2_parse_valibartion_value("ninefivenineplttv8seventwoggsmztd6") == 96
+
     def test_day_01_pt2_should_sum_values(self):
-        assert day_01_pt2_calibration_sum(["two1nine", "eightwothree", "abcone2threexyz", "xtwone3four", "4nineeightseven2", "zoneight234", "7pqrstsixteen"]) == 281
+        assert day_01_pt2_calibration_sum(
+            ["two1nine", "eightwothree", "abcone2threexyz", "xtwone3four", "4nineeightseven2", "zoneight234",
+             "7pqrstsixteen"]) == 281
