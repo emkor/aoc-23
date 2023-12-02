@@ -28,6 +28,9 @@ class GameSession:
     def could_be_played(self, req: 'GameSession') -> bool:
         return self.blues <= req.blues and self.greens <= req.greens and self.reds <= req.reds
 
+    def power(self) -> int:
+        return self.blues * self.greens * self.reds
+
 
 @dataclasses.dataclass
 class Game:
@@ -39,6 +42,11 @@ class Game:
 
     def can_be_played(self, req: GameSession) -> bool:
         return all((s.could_be_played(req=req) for s in self.sessions))
+
+    def min_req_cubes(self) -> GameSession:
+        return GameSession(reds=max((s.reds for s in self.sessions)),
+                           greens=max((s.greens for s in self.sessions)),
+                           blues=max((s.blues for s in self.sessions)))
 
     def __str__(self):
         return f"Game({str(self.sessions)})"
@@ -72,6 +80,13 @@ def day_02_pt1_answer(lines: list[str], req: GameSession) -> int:
     return sum_ix
 
 
+def day_02_pt2_answer(lines: list[str]) -> int:
+    games = [parse_game_line(l) for l in lines]
+    return sum([g.min_req_cubes().power() for g in games])
+
+
 if __name__ == '__main__':
     day02pt1_answer = day_02_pt1_answer(lines=day_02_input_lines(), req=GameSession(reds=12, greens=13, blues=14))
     print(f"Day 02 pt1 answer is: {day02pt1_answer}")
+    day02pt2_answer = day_02_pt2_answer(lines=day_02_input_lines())
+    print(f"Day 02 pt2 answer is: {day02pt2_answer}")

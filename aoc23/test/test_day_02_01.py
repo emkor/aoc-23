@@ -2,7 +2,7 @@ import unittest
 
 from aoc23.day_01_01 import day_01_pt1_parse_calibration_value, day_01_pt1_calibration_sum, \
     day_01_pt2_parse_valibartion_value, day_01_pt2_calibration_sum
-from aoc23.day_02_01 import parse_session, GameSession, parse_game_line, Game, day_02_pt1_answer
+from aoc23.day_02_01 import parse_session, GameSession, parse_game_line, Game, day_02_pt1_answer, day_02_pt2_answer
 
 
 class TestAocDay02Tests(unittest.TestCase):
@@ -30,9 +30,12 @@ class TestAocDay02Tests(unittest.TestCase):
     def test_day_02_pt1_game_can_be_played(self):
         req = GameSession(reds=12, greens=13, blues=14)
         assert parse_game_line("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green").can_be_played(req) is True
-        assert parse_game_line("Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue").can_be_played(req) is True
-        assert parse_game_line("Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red").can_be_played(req) is False
-        assert parse_game_line("Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red").can_be_played(req) is False
+        assert parse_game_line("Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue").can_be_played(
+            req) is True
+        assert parse_game_line(
+            "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red").can_be_played(req) is False
+        assert parse_game_line(
+            "Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red").can_be_played(req) is False
         assert parse_game_line("Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green").can_be_played(req) is True
 
     def test_day_02_pt1_answer(self):
@@ -45,3 +48,18 @@ class TestAocDay02Tests(unittest.TestCase):
             "Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green"
         ], req=req)
         assert actual_answer == 8
+
+    def test_should_calculate_power_for_game(self):
+        min_required_cubes = parse_game_line("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green").min_req_cubes()
+        assert min_required_cubes == GameSession(reds=4, greens=2, blues=6)
+        assert min_required_cubes.power() == 48
+
+    def test_day_02_pt2_answer(self):
+        actual_answer = day_02_pt2_answer(lines=[
+            "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
+            "Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
+            "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
+            "Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
+            "Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green"
+        ])
+        assert actual_answer == 2286
