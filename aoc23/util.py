@@ -14,3 +14,9 @@ def day_01_input_lines() -> typing.Iterable[str]:
     for line in fileinput.input(files=proj_path("input/day_01_calibration.txt"), encoding="utf-8"):
         if line.strip():  # eliminate empty newline at the end
             yield line.strip()
+
+
+def day_02_input_lines() -> typing.Iterable[str]:
+    for line in fileinput.input(files=proj_path("input/day_02_cubes.txt"), encoding="utf-8"):
+        if line.strip():  # eliminate empty newline at the end
+            yield line.strip()
