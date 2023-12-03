@@ -50,6 +50,12 @@ class Schematics:
                 if not ch.isdigit() and ch != '.':
                     yield x, y
 
+    def gear_ratio_symbols(self) -> typing.Iterable[tuple[int, int]]:
+        for y, l in enumerate(self.lines):
+            for x, ch in enumerate(l):
+                if ch == '*':
+                    yield x, y
+
     def _numbers(self, line: str) -> typing.Iterable[tuple[int, int, int]]:
         end = -1
         for x, ch in enumerate(line):
@@ -69,6 +75,30 @@ def day_03_pt1_answer(lines: typing.Iterable[str]) -> int:
     return sum((p.val for p in part_numbers))
 
 
+def day_03_pt2_answer(lines: typing.Iterable[str]) -> int:
+    return sum(_gear_ratios(lines))
+
+
+def _gear_ratios(lines: typing.Iterable[str]) -> list[int]:
+    schematics = Schematics(lines=list(lines))
+    part_numbers = set(schematics.part_numbers())
+    gear_ratio_symbols = set(schematics.gear_ratio_symbols())
+    gear_ratios = []
+    for grs_x, grs_y in gear_ratio_symbols:
+        gear_adjs = schematics.get_adjacents(grs_x, grs_y)
+        gear_part_numbers = set()
+        for pn in part_numbers:
+            for (adj_x, adj_y) in gear_adjs:
+                if pn.has(adj_x, adj_y):
+                    gear_part_numbers.add(pn)
+        if len(gear_part_numbers) == 2:
+            gear_part_numbers = list(gear_part_numbers)
+            gear_ratios.append(gear_part_numbers[0].val * gear_part_numbers[1].val)
+    return gear_ratios
+
+
 if __name__ == '__main__':
-    day02pt1_answer = day_03_pt1_answer(lines=input_lines('input/day_03_gear_ratios.txt'))
-    print(f"Day 02 pt1 answer is: {day02pt1_answer}")
+    day03pt1_answer = day_03_pt1_answer(lines=input_lines('input/day_03_gear_ratios.txt'))
+    print(f"Day 03 pt1 answer is: {day03pt1_answer}")
+    day03pt2_answer = day_03_pt2_answer(lines=input_lines('input/day_03_gear_ratios.txt'))
+    print(f"Day 03 pt2 answer is: {day03pt2_answer}")
