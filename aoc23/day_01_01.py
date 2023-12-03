@@ -1,7 +1,7 @@
 import collections
 import typing
 
-from aoc23.util import day_01_input_lines
+from aoc23.util import input_lines
 
 WORD_DIGITS = {
     "one": 1,
@@ -41,5 +41,5 @@ def day_01_pt2_calibration_sum(texts: typing.Iterable[str]) -> int:
 
 
 if __name__ == '__main__':
-    print(f"Day 01, part 1 answer: {day_01_pt1_calibration_sum(texts=day_01_input_lines())}")
-    print(f"Day 01, part 2 answer: {day_01_pt2_calibration_sum(texts=day_01_input_lines())}")
+    print(f"Day 01, part 1 answer: {day_01_pt1_calibration_sum(texts=input_lines('input/day_01_calibration.txt'))}")
+    print(f"Day 01, part 2 answer: {day_01_pt2_calibration_sum(texts=input_lines('input/day_01_calibration.txt'))}")

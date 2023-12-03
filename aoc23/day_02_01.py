@@ -1,7 +1,7 @@
 import dataclasses
-import re
+import typing
 
-from aoc23.util import day_02_input_lines
+from aoc23.util import input_lines
 
 COLORS = ('red', 'green', 'blue')
 
@@ -71,7 +71,7 @@ def parse_game_line(line: str) -> Game:
     return Game(ix=game_id, sessions=sessions)
 
 
-def day_02_pt1_answer(lines: list[str], req: GameSession) -> int:
+def day_02_pt1_answer(lines: typing.Iterable[str], req: GameSession) -> int:
     sum_ix = 0
     for l in lines:
         game = parse_game_line(l)
@@ -80,13 +80,14 @@ def day_02_pt1_answer(lines: list[str], req: GameSession) -> int:
     return sum_ix
 
 
-def day_02_pt2_answer(lines: list[str]) -> int:
+def day_02_pt2_answer(lines: typing.Iterable[str]) -> int:
     games = [parse_game_line(l) for l in lines]
     return sum([g.min_req_cubes().power() for g in games])
 
 
 if __name__ == '__main__':
-    day02pt1_answer = day_02_pt1_answer(lines=day_02_input_lines(), req=GameSession(reds=12, greens=13, blues=14))
+    day02pt1_answer = day_02_pt1_answer(lines=input_lines('input/day_02_cubes.txt'),
+                                        req=GameSession(reds=12, greens=13, blues=14))
     print(f"Day 02 pt1 answer is: {day02pt1_answer}")
-    day02pt2_answer = day_02_pt2_answer(lines=day_02_input_lines())
+    day02pt2_answer = day_02_pt2_answer(lines=input_lines('input/day_02_cubes.txt'))
     print(f"Day 02 pt2 answer is: {day02pt2_answer}")
