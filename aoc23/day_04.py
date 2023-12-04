@@ -1,5 +1,6 @@
 import dataclasses
 import typing
+from functools import lru_cache
 
 from aoc23.util import input_lines
 
@@ -31,28 +32,29 @@ def day_04_pt1_answer(lines: typing.Iterable[str]) -> int:
 
 
 def day_04_pt2_answer(lines: typing.Iterable[str]) -> int:
+    @lru_cache(maxsize=256)
+    def _resolve_new_hand(card_ix: int) -> list[int]:
+        return list(range(card_ix + 1, card_ix + 1 + deck[card_ix].wins()))
 
     deck: dict[int, Card] = {c.ix: c for c in (Card.parse(l) for l in lines)}
-    not_winning_ids = set()
-    hand: list[int] = sorted(list(deck.keys()))
-    i = 0
+    ignored = set()
+    queue: list[int] = sorted(list(deck.keys()))
+    processed: int = 0
 
-    while set(hand[i:]) != not_winning_ids and i < len(hand):
-        print(f"#{i} hand len={len(hand)} not_winning_ids={not_winning_ids}")
-        curr_card = deck[hand[i]]
-        new_hand = _resolve_new_hand(curr_card, not_winning_ids)
-        hand.extend(new_hand)
-        i += 1
-    return len(hand)
+    while queue:
+        curr_card_ix = queue.pop(0)
+        processed += 1
+        print(f"processed={processed} queue={len(queue)} curr_card_ix={curr_card_ix} ignored({len(ignored)}={ignored}) ")
+        if curr_card_ix in ignored:
+            continue
 
+        new_queue = _resolve_new_hand(curr_card_ix)
+        if not new_queue:
+            ignored.add(curr_card_ix)
 
-def _resolve_new_hand(curr_card: Card, not_winning_ids: set[int]):
-    new_hand = []
-    for next_card_ix in range(curr_card.ix + 1, curr_card.ix + 1 + curr_card.wins()):
-        new_hand.append(next_card_ix)
-    if not len(new_hand):
-        not_winning_ids.add(curr_card.ix)
-    return new_hand
+        queue = new_queue + queue
+
+    return processed
 
 
 if __name__ == '__main__':
