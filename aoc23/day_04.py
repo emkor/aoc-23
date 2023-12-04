@@ -44,7 +44,6 @@ def day_04_pt2_answer(lines: typing.Iterable[str]) -> int:
 
     while queue:
         curr_card_ix = queue.pop(0)
-        print(f"card_ix={curr_card_ix} processed={processed} queue={len(queue)}")
         queue = resolve_next_cards(curr_card_ix) + queue
         processed += 1
 
