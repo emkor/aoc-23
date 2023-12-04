@@ -1,6 +1,7 @@
 import dataclasses
 import time
 import typing
+from collections import Counter
 from functools import lru_cache
 
 from aoc23.util import input_lines
@@ -37,19 +38,18 @@ def day_04_pt2_answer(lines: typing.Iterable[str]) -> int:
     def resolve_next_cards(card_ix: int) -> list[int]:
         return list(range(card_ix + 1, card_ix + 1 + deck[card_ix].wins()))
 
-    deck: dict[int, Card] = {c.ix: c for c in (Card.parse(l) for l in lines)}
-    queue: list[int] = sorted(list(deck.keys()))
-    processed: int = 0
     start_time = time.time()
+    deck: dict[int, Card] = {c.ix: c for c in (Card.parse(l) for l in lines)}
+    queue: typing.Counter = Counter(deck.keys())
+    processed: int = 0
 
-    while queue:
-        curr_card_ix = queue.pop(0)
-        queue = resolve_next_cards(curr_card_ix) + queue
-        processed += 1
+    for ix in sorted(deck.keys()):
+        count = queue.pop(ix)
+        queue = queue + Counter(resolve_next_cards(ix) * count)
+        processed += count
 
     end_time = time.time()
-    print(resolve_next_cards.cache_info())
-    print(f"Processed {processed} items in {end_time - start_time:.3f}s ({processed / (end_time - start_time) / 1000:.1f}kop/s)")
+    print(f"Processed {processed} items in {end_time - start_time:.3f}s ({processed / (end_time - start_time) / 1000:.1f}kop/s), {resolve_next_cards.cache_info()}")
     return processed
 
 
