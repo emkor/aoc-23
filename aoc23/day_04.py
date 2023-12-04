@@ -39,16 +39,16 @@ def day_04_pt2_answer(lines: typing.Iterable[str]) -> int:
         return list(range(card_ix + 1, card_ix + 1 + deck[card_ix].wins()))
 
     start_time = time.time()
+
     deck: dict[int, Card] = {c.ix: c for c in (Card.parse(l) for l in lines)}
-    queue: typing.Counter = Counter(deck.keys())
-    processed: int = 0
+    cards_counter: typing.Counter = Counter(deck.keys())
 
     for ix in sorted(deck.keys()):
-        count = queue.pop(ix)
-        queue = queue + Counter(resolve_next_cards(ix) * count)
-        processed += count
+        cards_counter.update(resolve_next_cards(ix) * cards_counter[ix])
 
+    processed = cards_counter.total()
     end_time = time.time()
+
     print(f"Processed {processed} items in {end_time - start_time:.3f}s ({processed / (end_time - start_time) / 1000:.1f}kop/s), {resolve_next_cards.cache_info()}")
     return processed
 
