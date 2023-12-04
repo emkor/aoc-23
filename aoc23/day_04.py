@@ -1,4 +1,5 @@
 import dataclasses
+import time
 import typing
 from functools import lru_cache
 
@@ -37,23 +38,18 @@ def day_04_pt2_answer(lines: typing.Iterable[str]) -> int:
         return list(range(card_ix + 1, card_ix + 1 + deck[card_ix].wins()))
 
     deck: dict[int, Card] = {c.ix: c for c in (Card.parse(l) for l in lines)}
-    ignored = set()
     queue: list[int] = sorted(list(deck.keys()))
     processed: int = 0
+    start_time = time.time()
 
     while queue:
         curr_card_ix = queue.pop(0)
+        print(f"card_ix={curr_card_ix} processed={processed} queue={len(queue)}")
+        queue = _resolve_new_hand(curr_card_ix) + queue
         processed += 1
-        print(f"processed={processed} queue={len(queue)} curr_card_ix={curr_card_ix} ignored({len(ignored)}={ignored}) ")
-        if curr_card_ix in ignored:
-            continue
 
-        new_queue = _resolve_new_hand(curr_card_ix)
-        if not new_queue:
-            ignored.add(curr_card_ix)
-
-        queue = new_queue + queue
-
+    end_time = time.time()
+    print(f"Processed {processed} items in {end_time - start_time:.3f}s ({processed / (end_time - start_time) / 1000:.1f}kop/s)")
     return processed
 
 
