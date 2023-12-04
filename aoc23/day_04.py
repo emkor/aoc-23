@@ -34,7 +34,7 @@ def day_04_pt1_answer(lines: typing.Iterable[str]) -> int:
 
 def day_04_pt2_answer(lines: typing.Iterable[str]) -> int:
     @lru_cache(maxsize=256)
-    def _resolve_new_hand(card_ix: int) -> list[int]:
+    def resolve_next_cards(card_ix: int) -> list[int]:
         return list(range(card_ix + 1, card_ix + 1 + deck[card_ix].wins()))
 
     deck: dict[int, Card] = {c.ix: c for c in (Card.parse(l) for l in lines)}
@@ -45,10 +45,11 @@ def day_04_pt2_answer(lines: typing.Iterable[str]) -> int:
     while queue:
         curr_card_ix = queue.pop(0)
         print(f"card_ix={curr_card_ix} processed={processed} queue={len(queue)}")
-        queue = _resolve_new_hand(curr_card_ix) + queue
+        queue = resolve_next_cards(curr_card_ix) + queue
         processed += 1
 
     end_time = time.time()
+    print(resolve_next_cards.cache_info())
     print(f"Processed {processed} items in {end_time - start_time:.3f}s ({processed / (end_time - start_time) / 1000:.1f}kop/s)")
     return processed
 
