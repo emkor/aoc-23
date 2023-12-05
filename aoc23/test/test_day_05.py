@@ -1,6 +1,7 @@
 import unittest
 
-from aoc23.day_05 import Range, Mapping, parse_input, day_05_pt1_answer, resolve_categories, parse_seeds_pt1
+from aoc23.day_05 import MapRange, Mapping, parse_input, day_05_pt1_answer, resolve_categories, parse_seeds_pt1, \
+    parse_seeds_pt2, Range
 from aoc23.util import input_lines
 
 SINGLE_MAP_INPUT = """0 15 37
@@ -45,15 +46,15 @@ humidity-to-location map:
 class TestAocDay05Tests(unittest.TestCase):
 
     def test_pt1_should_parse_ranges(self):
-        map_range = Range.parse("50 98 2")
-        assert map_range.is_src_in(95) is False
-        assert map_range.is_src_in(102) is False
-        assert map_range.is_src_in(98) is True
-        assert map_range.is_src_in(99) is True
-        assert map_range.is_dst_in(2) is False
-        assert map_range.is_dst_in(57) is False
-        assert map_range.is_dst_in(50) is True
-        assert map_range.is_dst_in(51) is True
+        map_range = MapRange.parse("50 98 2")
+        assert (95 in map_range.src) is False
+        assert (102 in map_range.src) is False
+        assert (98 in map_range.src) is True
+        assert (99 in map_range.src) is True
+        assert (2 in map_range.dst) is False
+        assert (57 in map_range.dst) is False
+        assert (50 in map_range.dst) is True
+        assert (51 in map_range.dst) is True
 
         assert map_range.get_dst(99) == 51
         assert map_range.get_src(50) == 98
@@ -62,8 +63,8 @@ class TestAocDay05Tests(unittest.TestCase):
 
     def test_pt1_should_parse_map(self):
         mapping = Mapping.parse(lines=SINGLE_MAP_INPUT.splitlines())
-        assert mapping.ranges_sort_src[-1] == Range(39, 0, 15)
-        assert mapping.ranges_sort_dst[-1] == Range(0, 15, 37)
+        assert mapping.ranges_src[-1] == MapRange(dst=Range(39, 15), src=Range(0, 15))
+        assert mapping.ranges_dst[-1] == MapRange(dst=Range(0, 37), src=Range(15, 37))
         assert mapping.get_dst(53) == 38
         assert mapping.get_src(36) == 51
 
@@ -71,8 +72,8 @@ class TestAocDay05Tests(unittest.TestCase):
         seeds, maps = parse_input(lines=FULL_TEST_INPUT.splitlines(), parse_seeds_func=parse_seeds_pt1)
         assert seeds == [79, 14, 55, 13]
         assert len(maps) == 7
-        assert len(maps[0].ranges_sort_src) == 2
-        assert len(maps[-1].ranges_sort_src) == 2
+        assert len(maps[0].ranges_src) == 2
+        assert len(maps[-1].ranges_src) == 2
 
     def test_pt1_should_resolve_all_categories(self):
         seeds, maps = parse_input(lines=FULL_TEST_INPUT.splitlines(), parse_seeds_func=parse_seeds_pt1)
