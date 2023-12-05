@@ -8,15 +8,18 @@ from aoc23.util import input_lines
 
 @dataclasses.dataclass(frozen=True)
 class Range:
-    start: int = dataclasses.field(repr=True, hash=True, compare=True)  # inclusive
-    len: int = dataclasses.field(repr=True, hash=True, compare=True)  # inclusive
+    start: int = dataclasses.field(hash=True, compare=True)  # inclusive
+    len: int = dataclasses.field(hash=True, compare=True)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}{(self.start, self.end, self.len)}"
 
     def __len__(self) -> int:
         return self.len
 
     @property
     def end(self) -> int:
-        return self.start + self.len
+        return self.start + self.len - 1
 
     def __lt__(self, other: Range):
         return self.start < other.start
@@ -160,6 +163,19 @@ def resolve_categories(seed: int, maps: list[Mapping]) -> list[int]:
     return output
 
 
+# def resolve_ranges(rev_maps: list[Mapping], src_range: Range = None) -> Range | None:
+#     if rev_maps:
+#         map = rev_maps[0]
+#         print(f"Resolving {r} with map {map.label}")
+#         for r in map.ranges_dst:
+#             inner, left_outer, right_outer = r.resolve_src(other=r.dst)
+#             print(f"Inner: {inner} left outer: {left_outer} right outer: {right_outer}")
+#             if inner:
+#                 return resolve_ranges(rev_maps=rev_maps[1:], r=inner)
+#     print(f"Returning range: {r}")
+#     return r
+
+
 def day_05_pt1_answer(seeds: list[int], maps: list[Mapping]) -> int:
     print(f"Resolving categories for {len(seeds)}")
     start_time = time.time()
@@ -172,6 +188,21 @@ def day_05_pt1_answer(seeds: list[int], maps: list[Mapping]) -> int:
     return sorted(locations)[0]
 
 
+# def day_05_pt2_answer(maps: list[Mapping], seed_ranges: list[Range]) -> int:
+#     print(f"Resolving for {len(seed_ranges)} seed ranges using {len(maps)} maps")
+#     start_time = time.time()
+#
+#     rev_maps: list[Mapping] = list(reversed(maps))
+#     resolve_ranges(rev_maps)
+#
+#     end_time = time.time()
+#     print(f"Done resolving categories for {len(seeds)} in {end_time - start_time:.2f}seconds")
+#     return sorted(locations)[0]
+
+
 if __name__ == '__main__':
     seeds, mappings = parse_input(lines=input_lines('input/day_05_seeds.txt'), parse_seeds_func=parse_seeds_pt1)
     print(f"Day 05 pt1 answer: {day_05_pt1_answer(seeds, mappings)}")
+    #
+    # seeds2, mappings2 = parse_input(lines=input_lines('input/day_05_seeds.txt'), parse_seeds_func=parse_seeds_pt2)
+    # print(f"Day 05 pt2 answer: {day_05_pt1_answer(seeds2, mappings2)}")
