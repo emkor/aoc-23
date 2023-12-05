@@ -93,3 +93,20 @@ class TestAocDay05Tests(unittest.TestCase):
         seeds, mappings = parse_input(lines=input_lines('input/day_05_seeds.txt'), parse_seeds_func=parse_seeds_pt1)
         assert len(seeds) == 20
         assert len(mappings) == 7
+
+    def test_pt2_range_resolve(self):
+        test_range = Range(4, 7)
+
+        assert len(test_range) == 3
+        assert test_range.resolve(Range(1, 3)) == (None, Range(1, 3), None)
+        assert test_range.resolve(Range(2, 5)) == (Range(4, 5), Range(2, 3), None)
+        assert test_range.resolve(Range(4, 6)) == (Range(4, 6), None, None)
+        assert test_range.resolve(Range(6, 9)) == (Range(6, 7), None, Range(8, 9))
+        assert test_range.resolve(Range(8, 10)) == (None, None, Range(8, 10))
+        assert test_range.resolve(Range(1, 10)) == (Range(4, 7), Range(1, 3), Range(8, 10))
+
+    def test_pt2_parse_seeds(self):
+        seeds = list(parse_seeds_pt2("seeds: 79 14 55 13"))
+        assert len(seeds) == 27
+        assert seeds[0] == 79
+        assert seeds[-1] == 67

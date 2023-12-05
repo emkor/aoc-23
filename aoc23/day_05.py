@@ -138,6 +138,15 @@ def parse_seeds_pt1(line: str) -> typing.Iterable[int]:
     return [int(seed_str.strip()) for seed_str in line.split(": ")[-1].split(" ") if seed_str.strip()]
 
 
+def parse_seeds_pt2(line: str) -> typing.Iterable[Range]:
+    seed_ranges = list(parse_seeds_pt1(line))
+    output = []
+    for start_seed_ix in range(0, len(seed_ranges), 2):
+        seed_range = Range(start=seed_ranges[start_seed_ix], len=seed_ranges[start_seed_ix + 1])
+        output.append(seed_range)
+    return output
+
+
 def resolve_categories(seed: int, maps: list[Mapping]) -> list[int]:
     # first val is seed number, later -> all the mappings, last is location
     output = [seed]
