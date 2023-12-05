@@ -62,7 +62,7 @@ class TestAocDay05Tests(unittest.TestCase):
         assert map_range.get_dst(106) is None
 
     def test_pt1_should_parse_map(self):
-        mapping = Mapping.parse(lines=SINGLE_MAP_INPUT.splitlines())
+        mapping = Mapping.parse(label="soil-to-fertilizer", lines=SINGLE_MAP_INPUT.splitlines())
         assert mapping.ranges_src[-1] == MapRange(dst=Range(39, 15), src=Range(0, 15))
         assert mapping.ranges_dst[-1] == MapRange(dst=Range(0, 37), src=Range(15, 37))
         assert mapping.get_dst(53) == 38
@@ -106,7 +106,7 @@ class TestAocDay05Tests(unittest.TestCase):
         assert test_range.resolve(Range(1, 10)) == (Range(4, 7), Range(1, 3), Range(8, 10))
 
     def test_pt2_parse_seeds(self):
-        seeds = list(parse_seeds_pt2("seeds: 79 14 55 13"))
-        assert len(seeds) == 27
-        assert seeds[0] == 79
-        assert seeds[-1] == 67
+        seeds_ranges = list(parse_seeds_pt2("seeds: 79 14 55 13"))
+        assert sum((s.len for s in seeds_ranges)) == 27
+        assert seeds_ranges[0] == Range(start=79, len=14)
+        assert seeds_ranges[-1] == Range(start=55, len=13)

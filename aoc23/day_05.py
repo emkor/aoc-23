@@ -86,13 +86,15 @@ class MapRange:
 
 @dataclasses.dataclass
 class Mapping:
-    ranges_src: list[MapRange]
-    ranges_dst: list[MapRange]
+    label: str = dataclasses.field(repr=True)
+    ranges_src: list[MapRange] = dataclasses.field(repr=False)
+    ranges_dst: list[MapRange] = dataclasses.field(repr=False)
 
     @classmethod
-    def parse(cls, lines: list[str]) -> 'Mapping':
+    def parse(cls, label: str, lines: list[str]) -> 'Mapping':
         ranges: list[MapRange] = [MapRange.parse(line) for line in lines]
-        return Mapping(ranges_src=sorted(ranges, key=lambda r: r.src.start, reverse=True),
+        return Mapping(label=label,
+                       ranges_src=sorted(ranges, key=lambda r: r.src.start, reverse=True),
                        ranges_dst=sorted(ranges, key=lambda r: r.dst.start, reverse=True))
 
     def get_dst(self, src: int) -> int:
@@ -111,10 +113,12 @@ class Mapping:
         return len(self.ranges_src)
 
 
-def parse_input(lines: typing.Iterable[str], parse_seeds_func: typing.Callable) -> tuple[list[int], list[Mapping]]:
+def parse_input(lines: typing.Iterable[str], parse_seeds_func: typing.Callable) -> tuple[
+    list[int] | list[Range], list[Mapping]]:
     seeds = []
     maps = []
     curr_map_lines = []
+    curr_label: str | None = None
     for i, l in enumerate(lines):
         if l.startswith("seeds: "):
             seeds = parse_seeds_func(l)
@@ -123,14 +127,15 @@ def parse_input(lines: typing.Iterable[str], parse_seeds_func: typing.Callable) 
             continue
         elif l.endswith("map:"):
             if curr_map_lines:
-                maps.append(Mapping.parse(curr_map_lines))
+                maps.append(Mapping.parse(label=curr_label, lines=curr_map_lines))
                 curr_map_lines = []
+            curr_label = l.split(" ")[0]
             continue
         else:
             # case with range line
             curr_map_lines.append(l)
 
-    maps.append(Mapping.parse(curr_map_lines))
+    maps.append(Mapping.parse(label=curr_label, lines=curr_map_lines))
     return seeds, maps
 
 
