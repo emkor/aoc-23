@@ -1,6 +1,5 @@
 import unittest
 
-from aoc23.day_03_01 import Schematics, day_03_pt1_answer, day_03_pt2_answer, _gear_ratios
 from aoc23.day_04 import Card, day_04_pt1_answer, day_04_pt2_answer
 
 TEST_INPUT = """Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
