@@ -99,6 +99,7 @@ def parse_seeds_pt1(line: str):
 
 
 def resolve_categories(seed: int, maps: list[Mapping]) -> list[int]:
+    # first val is seed number, later -> all the mappings, last is location
     output = [seed]
     for m in maps:
         output.append(m.get_dst(output[-1]))
