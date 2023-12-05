@@ -71,13 +71,13 @@ class Mapping(abc.Mapping):
         return len(self.ranges_sort_src)
 
 
-def parse_input(lines: typing.Iterable[str]) -> tuple[list[int], list[Mapping]]:
+def parse_input(lines: typing.Iterable[str], parse_seeds_func: typing.Callable) -> tuple[list[int], list[Mapping]]:
     seeds = []
     maps = []
     curr_map_lines = []
     for i, l in enumerate(lines):
         if l.startswith("seeds: "):
-            seeds = [int(seed_str.strip()) for seed_str in l.split(": ")[-1].split(" ") if seed_str.strip()]
+            seeds = parse_seeds_func(l)
             continue
         elif not l.strip():
             continue
@@ -92,6 +92,10 @@ def parse_input(lines: typing.Iterable[str]) -> tuple[list[int], list[Mapping]]:
 
     maps.append(Mapping.parse(curr_map_lines))
     return seeds, maps
+
+
+def parse_seeds_pt1(line: str):
+    return [int(seed_str.strip()) for seed_str in line.split(": ")[-1].split(" ") if seed_str.strip()]
 
 
 def resolve_categories(seed: int, maps: list[Mapping]) -> list[int]:
@@ -109,5 +113,5 @@ def day_05_pt1_answer(seeds: list[int], maps: list[Mapping]) -> int:
 
 
 if __name__ == '__main__':
-    seeds, mappings = parse_input(lines=input_lines('input/day_05_seeds.txt'))
+    seeds, mappings = parse_input(lines=input_lines('input/day_05_seeds.txt'), parse_seeds_func=parse_seeds_pt1)
     print(f"Day 05 pt1 answer: {day_05_pt1_answer(seeds, mappings)}")

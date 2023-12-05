@@ -1,6 +1,6 @@
 import unittest
 
-from aoc23.day_05 import Range, Mapping, parse_input, day_05_pt1_answer, resolve_categories
+from aoc23.day_05 import Range, Mapping, parse_input, day_05_pt1_answer, resolve_categories, parse_seeds_pt1
 from aoc23.util import input_lines
 
 SINGLE_MAP_INPUT = """0 15 37
@@ -68,14 +68,14 @@ class TestAocDay05Tests(unittest.TestCase):
         assert mapping.get_src(36) == 51
 
     def test_pt1_should_parse_full_input(self):
-        seeds, maps = parse_input(lines=FULL_TEST_INPUT.splitlines())
+        seeds, maps = parse_input(lines=FULL_TEST_INPUT.splitlines(), parse_seeds_func=parse_seeds_pt1)
         assert seeds == [79, 14, 55, 13]
         assert len(maps) == 7
         assert len(maps[0].ranges_sort_src) == 2
         assert len(maps[-1].ranges_sort_src) == 2
 
     def test_pt1_should_resolve_all_categories(self):
-        seeds, maps = parse_input(lines=FULL_TEST_INPUT.splitlines())
+        seeds, maps = parse_input(lines=FULL_TEST_INPUT.splitlines(), parse_seeds_func=parse_seeds_pt1)
         seed_to_categories = {
             s: resolve_categories(seed=s, maps=maps) for s in seeds
         }
@@ -85,10 +85,10 @@ class TestAocDay05Tests(unittest.TestCase):
         assert seed_to_categories[13] == [13, 13, 52, 41, 34, 34, 35, 35]
 
     def test_pt1_should_get_answer(self):
-        seeds, maps = parse_input(lines=FULL_TEST_INPUT.splitlines())
+        seeds, maps = parse_input(lines=FULL_TEST_INPUT.splitlines(), parse_seeds_func=parse_seeds_pt1)
         assert day_05_pt1_answer(seeds, maps) == 35
 
     def test_pt1_parsing_input(self):
-        seeds, mappings = parse_input(lines=input_lines('input/day_05_seeds.txt'))
+        seeds, mappings = parse_input(lines=input_lines('input/day_05_seeds.txt'), parse_seeds_func=parse_seeds_pt1)
         assert len(seeds) == 20
         assert len(mappings) == 7
