@@ -33,5 +33,11 @@ def day_06_pt1_answer(lines: typing.Iterable[str]) -> int:
     return functools.reduce(operator.mul, win_options)
 
 
+def day_06_pt2_answer() -> int:
+    r = Race(time=44899691, distance=277113618901768)
+    return r.options_to_win()
+
+
 if __name__ == '__main__':
     print(f"Day 06 pt1 answer: {day_06_pt1_answer(lines=input_lines('input/day_06_races.txt'))}")
+    print(f"Day 06 pt2 answer: {day_06_pt2_answer()}")
