@@ -1,6 +1,6 @@
 import unittest
 
-from aoc23.day_07 import compare_lists, Hand, parse_hands, day_07_pt1_answer, rank_times_bid
+from aoc23.day_07 import compare_lists, Hand, parse_hands, day_07_pt1_answer, rank_times_bid, day_07_pt2_answer
 from aoc23.util import input_lines
 
 TEST_INPUT = """32T3K 765
@@ -96,3 +96,20 @@ class TestAocDay07Tests(unittest.TestCase):
         assert list(rank_times_bid(hands)) == [765 * 1, 220 * 2, 28 * 3, 684 * 4, 483 * 5]
 
         assert day_07_pt1_answer(lines=TEST_INPUT.splitlines()) == 6440
+
+    def test_pt2_should_parse_hand(self):
+        h = Hand.parse("T55J5 684", flag_pt2=True)
+        assert h.cards == ["T", "5", "5", "J", "5"]
+        assert h.bid == 684
+        assert h.is_five_of_a_kind() is False
+        assert h.is_four_of_a_kind() is True
+        assert h.is_three_of_a_kind() is False
+        assert h.is_two_pair() is False
+        assert h.is_one_pair() is False
+
+    def test_pt2_should_calc_strength(self):
+        h = Hand.parse("KTJJT 220", flag_pt2=True)
+        assert h.fig_and_strengths() == [5, 12, 10, 1, 1, 10]
+
+    def test_pt2_should_get_answer(self):
+        assert day_07_pt2_answer(lines=TEST_INPUT.splitlines()) == 5905
